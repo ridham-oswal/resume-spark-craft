@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { Download, ArrowLeft, FileImage, FileText, Printer, ZoomIn, ZoomOut } from "lucide-react";
+import { Download, ArrowLeft, FileImage, FileText, Printer, ZoomIn, ZoomOut, Cpu } from "lucide-react";
 import { initialResumeData, ResumeData, TemplateType } from "@/lib/resumeData";
 import ResumeTemplates from "@/components/ResumeTemplates";
 import ResumeForm from "@/components/ResumeForm";
@@ -18,6 +18,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import AiAnalysisModal from "@/components/AiAnalysisModal";
+import { analyzeResume, AiAnalysisResult } from "@/lib/aiAnalyzer";
 
 const Builder = () => {
   const navigate = useNavigate();
@@ -27,6 +29,11 @@ const Builder = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>("classic");
   const [previewScale, setPreviewScale] = useState<number>(0.7);
   const [isExporting, setIsExporting] = useState<boolean>(false);
+  
+  // AI Analysis state
+  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
+  const [analysisModalOpen, setAnalysisModalOpen] = useState<boolean>(false);
+  const [analysisResult, setAnalysisResult] = useState<AiAnalysisResult | null>(null);
 
   const handleUpdateResumeData = (data: ResumeData) => {
     setResumeData(data);
@@ -54,6 +61,26 @@ const Builder = () => {
       title: "Print dialog opened",
       description: "Use your browser's print function to print your resume",
     });
+  };
+
+  const handleAnalyzeResume = async () => {
+    setIsAnalyzing(true);
+    setAnalysisModalOpen(true);
+    setAnalysisResult(null);
+    
+    try {
+      const result = await analyzeResume(resumeData);
+      setAnalysisResult(result);
+    } catch (error) {
+      console.error("Resume analysis error:", error);
+      toast({
+        title: "Analysis Failed",
+        description: "Failed to analyze your resume. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   return (
@@ -137,6 +164,15 @@ const Builder = () => {
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Preview</h2>
               <div className="flex items-center gap-2 no-print">
+                <Button 
+                  onClick={handleAnalyzeResume}
+                  variant="outline" 
+                  className="gap-2 absolute left-1/2 transform -translate-x-1/2 top-0"
+                  disabled={isAnalyzing}
+                >
+                  <Cpu className={`h-4 w-4 ${isAnalyzing ? 'animate-spin' : ''}`} />
+                  {isAnalyzing ? "Analyzing..." : "Analyze with AI"}
+                </Button>
                 <span className="text-sm text-gray-500">Zoom:</span>
                 <Button 
                   variant="outline" 
@@ -181,6 +217,13 @@ const Builder = () => {
           </div>
         </div>
       </footer>
+
+      <AiAnalysisModal 
+        open={analysisModalOpen} 
+        onOpenChange={setAnalysisModalOpen} 
+        analyzing={isAnalyzing}
+        result={analysisResult}
+      />
     </div>
   );
 };
