@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Download, ArrowLeft, FileImage, FileText, Printer } from "lucide-react";
+import { Download, ArrowLeft, FileImage, FileText, Printer, ZoomIn, ZoomOut } from "lucide-react";
 import { initialResumeData, ResumeData, TemplateType } from "@/lib/resumeData";
 import ResumeTemplates from "@/components/ResumeTemplates";
 import ResumeForm from "@/components/ResumeForm";
@@ -27,17 +26,26 @@ const Builder = () => {
   const [activeTab, setActiveTab] = useState<string>("content");
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>("classic");
   const [previewScale, setPreviewScale] = useState<number>(0.7);
+  const [isExporting, setIsExporting] = useState<boolean>(false);
 
   const handleUpdateResumeData = (data: ResumeData) => {
     setResumeData(data);
   };
 
   const handleDownloadPDF = () => {
-    exportToPDF(resumeData, selectedTemplate);
+    setIsExporting(true);
+    setTimeout(() => {
+      exportToPDF(resumeData, selectedTemplate);
+      setIsExporting(false);
+    }, 100);
   };
   
   const handleDownloadJPEG = () => {
-    exportToJPEG(resumeData);
+    setIsExporting(true);
+    setTimeout(() => {
+      exportToJPEG(resumeData);
+      setIsExporting(false);
+    }, 100);
   };
   
   const handlePrint = () => {
@@ -65,17 +73,20 @@ const Builder = () => {
           <div className="flex gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="gap-2">
+                <Button 
+                  className="gap-2" 
+                  disabled={isExporting}
+                >
                   <Download className="h-4 w-4" />
-                  Download
+                  {isExporting ? "Processing..." : "Download"}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleDownloadPDF} className="gap-2">
+                <DropdownMenuItem onClick={handleDownloadPDF} className="gap-2" disabled={isExporting}>
                   <FileText className="h-4 w-4" />
                   <span>PDF Format</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDownloadJPEG} className="gap-2">
+                <DropdownMenuItem onClick={handleDownloadJPEG} className="gap-2" disabled={isExporting}>
                   <FileImage className="h-4 w-4" />
                   <span>JPEG Format</span>
                 </DropdownMenuItem>
@@ -125,22 +136,28 @@ const Builder = () => {
           <div className="lg:sticky lg:top-20 self-start">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Preview</h2>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 no-print">
                 <span className="text-sm text-gray-500">Zoom:</span>
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => setPreviewScale(prev => Math.max(0.4, prev - 0.1))}
-                >-</Button>
-                <span className="text-sm">{Math.round(previewScale * 100)}%</span>
+                  className="gap-1"
+                >
+                  <ZoomOut className="h-3.5 w-3.5" />
+                </Button>
+                <span className="text-sm w-12 text-center">{Math.round(previewScale * 100)}%</span>
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => setPreviewScale(prev => Math.min(1, prev + 0.1))}
-                >+</Button>
+                  className="gap-1"
+                >
+                  <ZoomIn className="h-3.5 w-3.5" />
+                </Button>
               </div>
             </div>
-            <div className="border rounded-lg overflow-auto shadow-lg max-h-[calc(100vh-250px)]">
+            <div className="border rounded-lg overflow-auto shadow-lg max-h-[calc(100vh-250px)] preview-container">
               <div style={{ transform: `scale(${previewScale})`, transformOrigin: 'top left', width: `${100 / previewScale}%` }}>
                 <ResumePreview resumeData={resumeData} template={selectedTemplate} />
               </div>
@@ -149,7 +166,7 @@ const Builder = () => {
         </div>
       </div>
       
-      <footer className="bg-white border-t py-8">
+      <footer className="bg-white border-t py-8 no-print">
         <div className="container">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">

@@ -75,7 +75,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-inter;
+    @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif;
   }
 
@@ -144,4 +144,41 @@
   background: white;
   padding: 0.5rem;
   border-bottom: 1px solid #eee;
+}
+
+/* Prevent text overlap in exports */
+.resume-page .flex,
+.resume-page .grid {
+  gap: 0.25rem;
+}
+
+/* Spacing fixes for export */
+.resume-page .grid-cols-1,
+.resume-page .grid-cols-2,
+.resume-page .grid-cols-3 {
+  gap: 0.5rem;
+}
+
+/* Make sure all text is spaced properly */
+.resume-page span, 
+.resume-page p {
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Better spacing for contact info */
+.resume-page .flex.justify-center.flex-wrap.gap-3 {
+  flex-wrap: wrap;
+  gap: 0.75rem !important;
+}
+
+/* Fix for section headers */
+.resume-page h2.border-b-2 {
+  margin-top: 1rem;
+  padding-bottom: 0.25rem;
+}
+
+/* Better contrast for ATS */
+.resume-page {
+  color: #000;
 }
