@@ -38,7 +38,6 @@ export const exportToPDF = (resumeData: ResumeData, templateType: TemplateType) 
     html2canvas: { 
       scale: 2, 
       useCORS: true,
-      letterRendering: true,
       logging: false,
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -98,7 +97,6 @@ export const exportToJPEG = (resumeData: ResumeData) => {
       scale: 3, // Higher scale for better quality
       useCORS: true,
       logging: false,
-      letterRendering: true,
       allowTaint: true,
     }).then(canvas => {
       // Convert canvas to data URL with high quality
