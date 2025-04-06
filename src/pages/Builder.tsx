@@ -5,14 +5,20 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Download, ArrowLeft } from "lucide-react";
+import { Download, ArrowLeft, FileImage, FileText, Printer } from "lucide-react";
 import { initialResumeData, ResumeData, TemplateType } from "@/lib/resumeData";
 import ResumeTemplates from "@/components/ResumeTemplates";
 import ResumeForm from "@/components/ResumeForm";
 import ResumePreview from "@/components/ResumePreview";
-import { exportToPDF } from "@/lib/pdfExport";
+import { exportToPDF, exportToJPEG } from "@/lib/pdfExport";
 import { useToast } from "@/components/ui/use-toast";
 import Header from "@/components/Header";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Builder = () => {
   const navigate = useNavigate();
@@ -20,16 +26,25 @@ const Builder = () => {
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [activeTab, setActiveTab] = useState<string>("content");
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>("classic");
+  const [previewScale, setPreviewScale] = useState<number>(0.7);
 
   const handleUpdateResumeData = (data: ResumeData) => {
     setResumeData(data);
   };
 
-  const handleDownload = () => {
+  const handleDownloadPDF = () => {
     exportToPDF(resumeData, selectedTemplate);
+  };
+  
+  const handleDownloadJPEG = () => {
+    exportToJPEG(resumeData);
+  };
+  
+  const handlePrint = () => {
+    window.print();
     toast({
-      title: "Success",
-      description: "Your resume has been downloaded",
+      title: "Print dialog opened",
+      description: "Use your browser's print function to print your resume",
     });
   };
 
@@ -48,13 +63,28 @@ const Builder = () => {
           </Button>
           
           <div className="flex gap-2">
-            <Button 
-              onClick={handleDownload}
-              className="gap-2"
-            >
-              <Download className="h-4 w-4" />
-              Download PDF
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="gap-2">
+                  <Download className="h-4 w-4" />
+                  Download
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleDownloadPDF} className="gap-2">
+                  <FileText className="h-4 w-4" />
+                  <span>PDF Format</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDownloadJPEG} className="gap-2">
+                  <FileImage className="h-4 w-4" />
+                  <span>JPEG Format</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handlePrint} className="gap-2">
+                  <Printer className="h-4 w-4" />
+                  <span>Print</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         
@@ -93,9 +123,27 @@ const Builder = () => {
           </div>
           
           <div className="lg:sticky lg:top-20 self-start">
-            <h2 className="text-2xl font-semibold mb-6">Preview</h2>
-            <div className="border rounded-lg overflow-hidden shadow-lg scale-[0.8] origin-top-left">
-              <ResumePreview resumeData={resumeData} template={selectedTemplate} />
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold">Preview</h2>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-500">Zoom:</span>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setPreviewScale(prev => Math.max(0.4, prev - 0.1))}
+                >-</Button>
+                <span className="text-sm">{Math.round(previewScale * 100)}%</span>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setPreviewScale(prev => Math.min(1, prev + 0.1))}
+                >+</Button>
+              </div>
+            </div>
+            <div className="border rounded-lg overflow-auto shadow-lg max-h-[calc(100vh-250px)]">
+              <div style={{ transform: `scale(${previewScale})`, transformOrigin: 'top left', width: `${100 / previewScale}%` }}>
+                <ResumePreview resumeData={resumeData} template={selectedTemplate} />
+              </div>
             </div>
           </div>
         </div>

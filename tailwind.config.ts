@@ -76,6 +76,18 @@ export default {
 						DEFAULT: '#4a5568',
 						light: '#a0aec0',
 						dark: '#2d3748',
+					},
+					green: {
+						DEFAULT: '#2f855a',
+						light: '#68d391'
+					},
+					slate: {
+						DEFAULT: '#334155',
+						dark: '#1e293b'
+					},
+					amber: {
+						DEFAULT: '#d97706',
+						light: '#fbbf24'
 					}
 				}
 			},

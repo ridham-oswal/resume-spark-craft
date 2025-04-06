@@ -35,7 +35,7 @@ export interface ResumeData {
   }[];
 }
 
-export type TemplateType = 'classic' | 'modern' | 'minimal';
+export type TemplateType = 'classic' | 'modern' | 'minimal' | 'executive' | 'professional' | 'creative';
 
 export const initialResumeData: ResumeData = {
   personalInfo: {
