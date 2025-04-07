@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -34,18 +33,52 @@ const Builder = () => {
 
   const handleDownloadPDF = () => {
     setIsExporting(true);
-    setTimeout(() => {
+    const previewElement = document.getElementById('resume-preview');
+    if (previewElement) {
+      const originalTransform = previewElement.style.transform;
+      const originalWidth = previewElement.style.width;
+      
+      previewElement.style.transform = 'none';
+      previewElement.style.width = '210mm';
+      
+      setTimeout(() => {
+        exportToPDF(resumeData, selectedTemplate);
+        
+        setTimeout(() => {
+          previewElement.style.transform = originalTransform;
+          previewElement.style.width = originalWidth;
+          setIsExporting(false);
+        }, 100);
+      }, 100);
+    } else {
       exportToPDF(resumeData, selectedTemplate);
       setIsExporting(false);
-    }, 100);
+    }
   };
   
   const handleDownloadJPEG = () => {
     setIsExporting(true);
-    setTimeout(() => {
+    const previewElement = document.getElementById('resume-preview');
+    if (previewElement) {
+      const originalTransform = previewElement.style.transform;
+      const originalWidth = previewElement.style.width;
+      
+      previewElement.style.transform = 'none';
+      previewElement.style.width = '210mm';
+      
+      setTimeout(() => {
+        exportToJPEG(resumeData);
+        
+        setTimeout(() => {
+          previewElement.style.transform = originalTransform;
+          previewElement.style.width = originalWidth;
+          setIsExporting(false);
+        }, 100);
+      }, 100);
+    } else {
       exportToJPEG(resumeData);
       setIsExporting(false);
-    }, 100);
+    }
   };
   
   const handlePrint = () => {
@@ -158,7 +191,14 @@ const Builder = () => {
               </div>
             </div>
             <div className="border rounded-lg overflow-auto shadow-lg max-h-[calc(100vh-250px)] preview-container">
-              <div style={{ transform: `scale(${previewScale})`, transformOrigin: 'top left', width: `${100 / previewScale}%` }}>
+              <div 
+                id="preview-container"
+                style={{ 
+                  transform: `scale(${previewScale})`, 
+                  transformOrigin: 'top left', 
+                  width: `${100 / previewScale}%` 
+                }}
+              >
                 <ResumePreview resumeData={resumeData} template={selectedTemplate} />
               </div>
             </div>

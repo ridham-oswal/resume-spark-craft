@@ -93,6 +93,10 @@
   line-height: 1.5;
   break-inside: avoid;
   page-break-inside: auto;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* A4 dimensions class */
@@ -266,4 +270,33 @@
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
   }
+}
+
+/* Fix for export rendering */
+#resume-preview {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  display: block;
+}
+
+#resume-preview * {
+  box-sizing: border-box;
+}
+
+/* Fix for PDF export rendering */
+.html2pdf__container {
+  background-color: white !important;
+}
+
+/* Ensure borders and backgrounds render correctly in exports */
+.resume-page div,
+.resume-page section,
+.resume-page header {
+  box-sizing: border-box;
+  page-break-inside: avoid;
+}
+
+/* Fix for skills bars in exports */
+.resume-page [class*="bg-"] {
+  position: relative; /* Ensure backgrounds render properly */
 }
