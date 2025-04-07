@@ -34,6 +34,7 @@ const ResumeForm = ({ resumeData, onUpdateResumeData }: ResumeFormProps) => {
       id: `exp${Date.now()}`,
       company: "",
       position: "",
+      location: "", // Added missing location property
       startDate: "",
       endDate: "",
       current: false,
@@ -76,6 +77,7 @@ const ResumeForm = ({ resumeData, onUpdateResumeData }: ResumeFormProps) => {
     const newEdu = {
       id: `edu${Date.now()}`,
       institution: "",
+      location: "", // Added missing location property
       degree: "",
       field: "",
       startDate: "",
