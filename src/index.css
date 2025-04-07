@@ -84,12 +84,23 @@
   }
 }
 
+/* A4 Paper dimensions */
 .resume-page {
   width: 210mm;
   min-height: 297mm;
   box-shadow: 0 0 0.5cm rgba(0,0,0,0.1);
   background: white;
   line-height: 1.5;
+  break-inside: avoid;
+  page-break-inside: auto;
+}
+
+/* A4 dimensions class */
+.a4-dimensions {
+  width: 210mm;
+  padding: 0;
+  margin: 0 auto;
+  background: white;
 }
 
 @page {
@@ -103,15 +114,30 @@
     height: 297mm;
     margin: 0;
     padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
+  
   .resume-page {
     margin: 0;
-    box-shadow: none;
+    border: initial;
+    border-radius: initial;
+    box-shadow: initial;
+    background: initial;
+    page-break-after: always;
     width: 100%;
-    height: 100%;
+    height: auto;
+    overflow: hidden;
   }
+  
   .no-print {
     display: none !important;
+  }
+  
+  /* Force background printing */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
   }
 }
 
@@ -181,4 +207,63 @@
 /* Better contrast for ATS */
 .resume-page {
   color: #000;
+}
+
+/* Multi-page handling */
+@media print {
+  .resume-page {
+    page-break-after: always;
+  }
+  
+  /* Allow content to flow to next page */
+  .resume-page > div {
+    page-break-inside: auto;
+  }
+  
+  /* Prevent orphaned headers */
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+  
+  /* Keep these elements together */
+  .mb-4, .mb-5, .mb-6 {
+    page-break-inside: avoid;
+  }
+}
+
+/* Animation for content loading and transitions */
+.resume-page > div {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* For creative template that has a sidebar */
+@media print {
+  .resume-page .flex.flex-col.md\\:flex-row {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+  
+  .resume-page .md\\:w-1\\/3 {
+    width: 33.333333% !important;
+  }
+  
+  .resume-page .md\\:w-2\\/3 {
+    width: 66.666667% !important;
+  }
+}
+
+/* Ensure skill bars print correctly */
+@media print {
+  .resume-page .bg-resume-blue,
+  .resume-page .bg-resume-green,
+  .resume-page .bg-indigo-700,
+  .resume-page .bg-white {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
 }
