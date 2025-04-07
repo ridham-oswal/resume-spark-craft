@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -32,51 +33,127 @@ const Builder = () => {
   };
 
   const handleDownloadPDF = () => {
+    if (isExporting) return;
+    
     setIsExporting(true);
+    toast({
+      title: "Processing",
+      description: "Preparing your PDF. This may take a moment...",
+    });
+    
+    // Ensure the preview is at full size before exporting
+    const previewContainer = document.getElementById('preview-container');
     const previewElement = document.getElementById('resume-preview');
-    if (previewElement) {
+    
+    if (previewElement && previewContainer) {
+      // Save the original styles to restore later
       const originalTransform = previewElement.style.transform;
       const originalWidth = previewElement.style.width;
+      const originalContainerWidth = previewContainer.style.width;
+      const originalContainerOverflow = previewContainer.style.overflow;
       
+      // Set to full size for export
       previewElement.style.transform = 'none';
       previewElement.style.width = '210mm';
+      previewContainer.style.width = '210mm';
+      previewContainer.style.overflow = 'visible';
       
+      // Wait for styles to apply
       setTimeout(() => {
-        exportToPDF(resumeData, selectedTemplate);
+        try {
+          exportToPDF(resumeData, selectedTemplate);
+        } catch (error) {
+          console.error('Error in PDF export:', error);
+          toast({
+            title: "Error",
+            description: "Failed to export as PDF. Please try again.",
+            variant: "destructive",
+          });
+        }
         
+        // Restore original styles
         setTimeout(() => {
           previewElement.style.transform = originalTransform;
           previewElement.style.width = originalWidth;
+          previewContainer.style.width = originalContainerWidth;
+          previewContainer.style.overflow = originalContainerOverflow;
           setIsExporting(false);
-        }, 100);
-      }, 100);
+        }, 1500);
+      }, 500);
     } else {
-      exportToPDF(resumeData, selectedTemplate);
+      try {
+        exportToPDF(resumeData, selectedTemplate);
+      } catch (error) {
+        console.error('Error in PDF export:', error);
+        toast({
+          title: "Error",
+          description: "Failed to export as PDF. Please try again.",
+          variant: "destructive",
+        });
+      }
       setIsExporting(false);
     }
   };
   
   const handleDownloadJPEG = () => {
+    if (isExporting) return;
+    
     setIsExporting(true);
+    toast({
+      title: "Processing",
+      description: "Preparing your JPEG. This may take a moment...",
+    });
+    
+    // Ensure the preview is at full size before exporting
+    const previewContainer = document.getElementById('preview-container');
     const previewElement = document.getElementById('resume-preview');
-    if (previewElement) {
+    
+    if (previewElement && previewContainer) {
+      // Save the original styles to restore later
       const originalTransform = previewElement.style.transform;
       const originalWidth = previewElement.style.width;
+      const originalContainerWidth = previewContainer.style.width;
+      const originalContainerOverflow = previewContainer.style.overflow;
       
+      // Set to full size for export
       previewElement.style.transform = 'none';
       previewElement.style.width = '210mm';
+      previewContainer.style.width = '210mm';
+      previewContainer.style.overflow = 'visible';
       
+      // Wait for styles to apply
       setTimeout(() => {
-        exportToJPEG(resumeData);
+        try {
+          exportToJPEG(resumeData);
+        } catch (error) {
+          console.error('Error in JPEG export:', error);
+          toast({
+            title: "Error",
+            description: "Failed to export as JPEG. Please try again.",
+            variant: "destructive",
+          });
+        }
         
+        // Restore original styles
         setTimeout(() => {
           previewElement.style.transform = originalTransform;
           previewElement.style.width = originalWidth;
+          previewContainer.style.width = originalContainerWidth;
+          previewContainer.style.overflow = originalContainerOverflow;
           setIsExporting(false);
-        }, 100);
-      }, 100);
+        }, 1500);
+      }, 500);
     } else {
-      exportToJPEG(resumeData);
+      try {
+        exportToJPEG(resumeData);
+      } catch (error) {
+        console.error('Error in JPEG export:', error);
+        toast({
+          title: "Error",
+          description: "Failed to export as JPEG. Please try again.",
+          variant: "destructive",
+        });
+      }
       setIsExporting(false);
     }
   };

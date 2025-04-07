@@ -21,11 +21,11 @@ export const exportToPDF = (resumeData: ResumeData, templateType: TemplateType) 
   // Create a deep clone of the element to avoid modifying the original
   const clonedElement = element.cloneNode(true) as HTMLElement;
   
-  // Ensure proper dimensions and styling
+  // Force display and layout to be block with proper dimensions
   clonedElement.style.width = '210mm';
   clonedElement.style.minHeight = '297mm';
   clonedElement.style.height = 'auto';
-  clonedElement.style.position = 'absolute';
+  clonedElement.style.position = 'fixed';
   clonedElement.style.left = '-9999px';
   clonedElement.style.top = '0';
   clonedElement.style.padding = '0';
@@ -34,20 +34,29 @@ export const exportToPDF = (resumeData: ResumeData, templateType: TemplateType) 
   clonedElement.style.boxSizing = 'border-box';
   clonedElement.style.overflow = 'visible';
   clonedElement.style.transform = 'none'; // Remove any scaling
+  clonedElement.style.opacity = '1';
+  clonedElement.style.visibility = 'visible';
+  clonedElement.style.display = 'block';
   
-  // Make sure styles are applied
-  Array.from(clonedElement.querySelectorAll('*')).forEach((el) => {
+  // Apply styles to all child elements to ensure they are visible
+  const allElements = clonedElement.querySelectorAll('*');
+  allElements.forEach((el) => {
     const element = el as HTMLElement;
     element.style.fontSize = element.style.fontSize || 'inherit'; 
     element.style.lineHeight = element.style.lineHeight || '1.5';
     element.style.boxSizing = 'border-box';
+    element.style.display = window.getComputedStyle(element).display;
+    element.style.visibility = 'visible';
+    element.style.opacity = '1';
     
-    // Ensure backgrounds and colors are preserved
-    if (window.getComputedStyle(element).backgroundColor !== 'rgba(0, 0, 0, 0)') {
-      element.style.backgroundColor = window.getComputedStyle(element).backgroundColor;
-    }
-    if (window.getComputedStyle(element).color !== '') {
-      element.style.color = window.getComputedStyle(element).color;
+    // Preserve backgrounds and colors from computed styles
+    element.style.color = window.getComputedStyle(element).color;
+    element.style.backgroundColor = window.getComputedStyle(element).backgroundColor;
+    
+    // Ensure any flex or grid layouts are preserved
+    const computedStyle = window.getComputedStyle(element);
+    if (computedStyle.display === 'flex' || computedStyle.display === 'grid') {
+      element.style.display = computedStyle.display;
     }
   });
   
@@ -60,24 +69,49 @@ export const exportToPDF = (resumeData: ResumeData, templateType: TemplateType) 
   // Append to body to ensure styles are applied
   document.body.appendChild(clonedElement);
   
-  // Ensure all images and fonts are loaded before generating PDF
+  // CSS fixes for proper PDF rendering
+  const style = document.createElement('style');
+  style.innerHTML = `
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #resume-clone, #resume-clone * {
+        visibility: visible;
+      }
+      #resume-clone {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 210mm !important;
+        height: auto !important;
+      }
+    }
+  `;
+  clonedElement.appendChild(style);
+  clonedElement.id = 'resume-clone';
+
+  // Let the DOM update before generating PDF
   setTimeout(() => {
     const opt = {
       margin: 0,
       filename: fileName,
-      image: { type: 'jpeg', quality: 1.0 },
+      image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
         scale: 3, 
         useCORS: true,
-        logging: false,
+        logging: true,
         allowTaint: true,
         letterRendering: true,
+        foreignObjectRendering: true,
+        removeContainer: true
       },
       jsPDF: { 
         unit: 'mm', 
         format: 'a4', 
         orientation: 'portrait',
         compress: true,
+        hotfixes: ["px_scaling"]
       }
     };
     
@@ -86,8 +120,10 @@ export const exportToPDF = (resumeData: ResumeData, templateType: TemplateType) 
       .set(opt)
       .save()
       .then(() => {
-        // Remove the cloned element
-        document.body.removeChild(clonedElement);
+        // Remove the cloned element after successful export
+        if (document.body.contains(clonedElement)) {
+          document.body.removeChild(clonedElement);
+        }
         
         toast({
           title: "Success",
@@ -95,7 +131,9 @@ export const exportToPDF = (resumeData: ResumeData, templateType: TemplateType) 
         });
       }).catch(error => {
         console.error('Error exporting to PDF:', error);
-        document.body.removeChild(clonedElement);
+        if (document.body.contains(clonedElement)) {
+          document.body.removeChild(clonedElement);
+        }
         
         toast({
           title: "Error",
@@ -103,7 +141,7 @@ export const exportToPDF = (resumeData: ResumeData, templateType: TemplateType) 
           variant: "destructive",
         });
       });
-  }, 1000); // Increased delay to ensure proper rendering
+  }, 1500); // Increased delay to ensure proper rendering
 };
 
 export const exportToJPEG = (resumeData: ResumeData) => {
@@ -126,7 +164,7 @@ export const exportToJPEG = (resumeData: ResumeData) => {
   clonedElement.style.width = '210mm';
   clonedElement.style.minHeight = '297mm';
   clonedElement.style.height = 'auto';
-  clonedElement.style.position = 'absolute';
+  clonedElement.style.position = 'fixed';
   clonedElement.style.left = '-9999px';
   clonedElement.style.top = '0';
   clonedElement.style.padding = '0';
@@ -134,30 +172,40 @@ export const exportToJPEG = (resumeData: ResumeData) => {
   clonedElement.style.fontSize = '10pt';
   clonedElement.style.boxSizing = 'border-box';
   clonedElement.style.transform = 'none'; // Remove any scaling
+  clonedElement.style.opacity = '1';
+  clonedElement.style.visibility = 'visible';
+  clonedElement.style.display = 'block';
   
-  // Apply computed styles to ensure proper rendering
-  Array.from(clonedElement.querySelectorAll('*')).forEach((el) => {
+  // Apply styles to all child elements to ensure they are visible
+  const allElements = clonedElement.querySelectorAll('*');
+  allElements.forEach((el) => {
     const element = el as HTMLElement;
-    element.style.fontSize = element.style.fontSize || 'inherit';
+    element.style.fontSize = element.style.fontSize || 'inherit'; 
     element.style.lineHeight = element.style.lineHeight || '1.5';
     element.style.boxSizing = 'border-box';
+    element.style.display = window.getComputedStyle(element).display;
+    element.style.visibility = 'visible';
+    element.style.opacity = '1';
     
-    // Ensure backgrounds and colors are preserved
-    if (window.getComputedStyle(element).backgroundColor !== 'rgba(0, 0, 0, 0)') {
-      element.style.backgroundColor = window.getComputedStyle(element).backgroundColor;
-    }
-    if (window.getComputedStyle(element).color !== '') {
-      element.style.color = window.getComputedStyle(element).color;
+    // Preserve backgrounds and colors from computed styles
+    element.style.color = window.getComputedStyle(element).color;
+    element.style.backgroundColor = window.getComputedStyle(element).backgroundColor;
+    
+    // Ensure any flex or grid layouts are preserved
+    const computedStyle = window.getComputedStyle(element);
+    if (computedStyle.display === 'flex' || computedStyle.display === 'grid') {
+      element.style.display = computedStyle.display;
     }
   });
-  
-  document.body.appendChild(clonedElement);
   
   // Hide print elements
   const printElements = clonedElement.querySelectorAll('.no-print');
   printElements.forEach(el => {
     (el as HTMLElement).style.display = 'none';
   });
+
+  clonedElement.id = 'resume-clone-jpg';
+  document.body.appendChild(clonedElement);
 
   const fileName = `${resumeData.personalInfo.name.replace(/\s+/g, '_')}_resume.jpg`;
 
@@ -168,14 +216,20 @@ export const exportToJPEG = (resumeData: ResumeData) => {
       html2canvas.default(clonedElement, {
         scale: 4, // Higher scale for even better quality
         useCORS: true,
-        logging: false,
+        logging: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
+        windowWidth: 794, // A4 width in pixels at 96 DPI
+        windowHeight: 1123, // A4 height in pixels at 96 DPI
+        foreignObjectRendering: true,
         onclone: (doc, ele) => {
           // Ensure all styles are properly applied in the cloned document
           const clonedResume = ele as HTMLElement;
-          clonedResume.style.transform = 'none'; // Remove any zoom scaling
+          clonedResume.style.transform = 'none';
           clonedResume.style.width = '210mm';
+          clonedResume.style.margin = '0';
+          clonedResume.style.padding = '0';
+          clonedResume.style.backgroundColor = 'white';
         }
       }).then(canvas => {
         // Convert canvas to data URL with high quality
@@ -190,7 +244,9 @@ export const exportToJPEG = (resumeData: ResumeData) => {
         
         // Clean up
         document.body.removeChild(link);
-        document.body.removeChild(clonedElement);
+        if (document.body.contains(clonedElement)) {
+          document.body.removeChild(clonedElement);
+        }
         
         toast({
           title: "Success",
@@ -198,7 +254,9 @@ export const exportToJPEG = (resumeData: ResumeData) => {
         });
       }).catch(error => {
         console.error('Error during canvas creation:', error);
-        document.body.removeChild(clonedElement);
+        if (document.body.contains(clonedElement)) {
+          document.body.removeChild(clonedElement);
+        }
         
         toast({
           title: "Error",
@@ -208,7 +266,9 @@ export const exportToJPEG = (resumeData: ResumeData) => {
       });
     }).catch(error => {
       console.error('Error importing html2canvas:', error);
-      document.body.removeChild(clonedElement);
+      if (document.body.contains(clonedElement)) {
+        document.body.removeChild(clonedElement);
+      }
       
       toast({
         title: "Error",
@@ -216,5 +276,5 @@ export const exportToJPEG = (resumeData: ResumeData) => {
         variant: "destructive",
       });
     });
-  }, 1000);
+  }, 1500); // Increased delay to ensure proper rendering
 };

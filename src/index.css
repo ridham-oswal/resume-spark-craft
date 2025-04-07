@@ -300,3 +300,51 @@
 .resume-page [class*="bg-"] {
   position: relative; /* Ensure backgrounds render properly */
 }
+
+/* Enhanced export styles */
+#resume-clone, #resume-clone-jpg {
+  background-color: white !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  width: 210mm !important;
+}
+
+#resume-clone *, #resume-clone-jpg * {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Fix for resume templates to ensure they're visible in exports */
+.resume-page > div {
+  display: block !important;
+  width: 100% !important;
+  background-color: white !important;
+  visibility: visible !important;
+}
+
+/* Fix for flex layouts in exports */
+.resume-page .flex {
+  display: flex !important;
+}
+
+.resume-page .grid {
+  display: grid !important;
+}
+
+.resume-page .bg-white,
+.resume-page .bg-slate-900,
+.resume-page .bg-resume-blue,
+.resume-page .bg-resume-amber,
+.resume-page .bg-resume-green,
+.resume-page .bg-indigo-50,
+.resume-page .bg-indigo-700,
+.resume-page .bg-slate-800 {
+  background-color: currentColor !important;
+}
+
+/* Ensure images render correctly */
+.resume-page img {
+  max-width: 100% !important;
+  object-fit: contain !important;
+}
