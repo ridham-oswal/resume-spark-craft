@@ -84,12 +84,28 @@
   }
 }
 
+/* Resume page base styles */
 .resume-page {
   width: 210mm;
   min-height: 297mm;
   box-shadow: 0 0 0.5cm rgba(0,0,0,0.1);
   background: white;
   line-height: 1.5;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Resume template containers - ensure they fill the page */
+.resume-template-container {
+  width: 100%;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fix for Creative and Executive templates that use grid */
+.resume-template-container.flex {
+  min-height: 297mm;
 }
 
 @page {
@@ -104,14 +120,23 @@
     margin: 0;
     padding: 0;
   }
+  
   .resume-page {
     margin: 0;
     box-shadow: none;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+    page-break-after: always;
   }
+  
   .no-print {
     display: none !important;
+  }
+  
+  /* Ensure elements don't break across pages */
+  .resume-template-container > div {
+    page-break-inside: avoid;
   }
 }
 
@@ -136,6 +161,16 @@
   margin-bottom: 0.5em;
 }
 
+/* Resume export styles - these will only apply during export */
+.resume-export {
+  transform: none !important;
+  transform-origin: center !important;
+  width: 210mm !important;
+  height: 297mm !important;
+  max-width: none !important;
+  overflow: hidden !important;
+}
+
 /* Responsive Zoom Controls */
 .zoom-controls {
   position: sticky;
@@ -144,4 +179,69 @@
   background: white;
   padding: 0.5rem;
   border-bottom: 1px solid #eee;
+}
+
+/* Resume Colors */
+.text-resume-blue {
+  color: #1e40af;
+}
+
+.text-resume-blue-light {
+  color: #3b82f6;
+}
+
+.text-resume-gray {
+  color: #6b7280;
+}
+
+.text-resume-gray-dark {
+  color: #374151;
+}
+
+.text-resume-green {
+  color: #10b981;
+}
+
+.text-resume-slate {
+  color: #475569;
+}
+
+.text-resume-slate-dark {
+  color: #1e293b;
+}
+
+.text-resume-amber {
+  color: #f59e0b;
+}
+
+.border-resume-blue {
+  border-color: #1e40af;
+}
+
+.border-resume-blue-light {
+  border-color: #3b82f6;
+}
+
+.border-resume-green {
+  border-color: #10b981;
+}
+
+.border-resume-amber-light {
+  border-color: #fcd34d;
+}
+
+.bg-resume-blue {
+  background-color: #1e40af;
+}
+
+.bg-resume-blue-light {
+  background-color: #3b82f6;
+}
+
+.bg-resume-green {
+  background-color: #10b981;
+}
+
+.bg-resume-amber {
+  background-color: #f59e0b;
 }

@@ -10,7 +10,7 @@ interface ResumePreviewProps {
 const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
   // Classic Template
   const ClassicTemplate = () => (
-    <div className="bg-white p-8 shadow-lg">
+    <div className="resume-template-container bg-white p-8 shadow-lg min-h-full">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-resume-blue">{resumeData.personalInfo.name}</h1>
         <p className="text-xl text-resume-gray">{resumeData.personalInfo.title}</p>
@@ -86,7 +86,7 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
 
   // Modern Template
   const ModernTemplate = () => (
-    <div className="bg-white">
+    <div className="resume-template-container bg-white h-full">
       <div className="bg-resume-blue text-white p-8">
         <h1 className="text-3xl font-bold">{resumeData.personalInfo.name}</h1>
         <p className="text-xl mt-1">{resumeData.personalInfo.title}</p>
@@ -202,7 +202,7 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
 
   // Minimal Template
   const MinimalTemplate = () => (
-    <div className="bg-white p-8">
+    <div className="resume-template-container bg-white p-8 min-h-full">
       <div className="mb-8">
         <h1 className="text-4xl font-light">{resumeData.personalInfo.name}</h1>
         <p className="text-xl text-resume-gray mt-1">{resumeData.personalInfo.title}</p>
@@ -277,16 +277,16 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
     </div>
   );
 
-  // Executive Template (added)
+  // Executive Template 
   const ExecutiveTemplate = () => (
-    <div className="bg-white">
+    <div className="resume-template-container bg-white h-full">
       <div className="bg-slate-900 text-white p-8">
         <h1 className="text-3xl font-bold">{resumeData.personalInfo.name}</h1>
         <p className="text-xl font-light mt-2">{resumeData.personalInfo.title}</p>
       </div>
       
-      <div className="grid grid-cols-3 gap-8 p-8">
-        <div className="col-span-1 border-r pr-6">
+      <div className="grid grid-cols-3 gap-0">
+        <div className="col-span-1 border-r pr-6 p-8 h-full">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-resume-slate uppercase mb-3">Contact</h2>
             {resumeData.personalInfo.email && (
@@ -315,7 +315,7 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
           )}
         </div>
         
-        <div className="col-span-2">
+        <div className="col-span-2 p-8">
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-resume-slate-dark border-b border-gray-200 pb-2 mb-3">
               Professional Profile
@@ -375,9 +375,9 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
     </div>
   );
 
-  // Professional Template (added)
+  // Professional Template
   const ProfessionalTemplate = () => (
-    <div className="bg-white">
+    <div className="resume-template-container bg-white h-full">
       <div className="p-8 border-b-4 border-resume-green">
         <h1 className="text-3xl font-bold text-resume-green">{resumeData.personalInfo.name}</h1>
         <p className="text-xl text-resume-gray mt-1">{resumeData.personalInfo.title}</p>
@@ -483,103 +483,101 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
     </div>
   );
 
-  // Creative Template (added)
+  // Creative Template
   const CreativeTemplate = () => (
-    <div className="bg-white">
-      <div className="flex">
-        <div className="w-1/3 bg-resume-amber p-6 text-white min-h-screen">
-          <div className="mb-8 text-center">
-            <h1 className="text-2xl font-bold mb-1">{resumeData.personalInfo.name}</h1>
-            <p className="text-lg">{resumeData.personalInfo.title}</p>
-          </div>
-          
-          <div className="mb-6">
-            <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Contact</h2>
-            {resumeData.personalInfo.email && (
-              <p className="text-sm mb-2">{resumeData.personalInfo.email}</p>
-            )}
-            {resumeData.personalInfo.phone && (
-              <p className="text-sm mb-2">{resumeData.personalInfo.phone}</p>
-            )}
-            {resumeData.personalInfo.location && (
-              <p className="text-sm mb-2">{resumeData.personalInfo.location}</p>
-            )}
-            {resumeData.personalInfo.website && (
-              <p className="text-sm mb-2">{resumeData.personalInfo.website}</p>
-            )}
-          </div>
-          
-          {resumeData.skills.length > 0 && (
-            <div className="mb-6">
-              <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Skills</h2>
-              <div className="space-y-3">
-                {resumeData.skills.map((skill) => (
-                  <div key={skill.id}>
-                    <p className="text-sm mb-1">{skill.name}</p>
-                    {skill.level !== undefined && (
-                      <div className="h-1.5 bg-white/20 rounded-full">
-                        <div 
-                          className="h-1.5 bg-white rounded-full" 
-                          style={{ width: `${skill.level}%` }}
-                        ></div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+    <div className="resume-template-container bg-white h-full flex">
+      <div className="w-1/3 bg-resume-amber p-6 text-white h-full">
+        <div className="mb-8 text-center">
+          <h1 className="text-2xl font-bold mb-1">{resumeData.personalInfo.name}</h1>
+          <p className="text-lg">{resumeData.personalInfo.title}</p>
+        </div>
+        
+        <div className="mb-6">
+          <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Contact</h2>
+          {resumeData.personalInfo.email && (
+            <p className="text-sm mb-2">{resumeData.personalInfo.email}</p>
           )}
-          
-          {resumeData.education.length > 0 && (
-            <div className="mb-6">
-              <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Education</h2>
-              {resumeData.education.map((edu) => (
-                <div key={edu.id} className="mb-4">
-                  <p className="font-semibold text-sm">{edu.degree} in {edu.field}</p>
-                  <p className="text-sm mb-1">{edu.institution}</p>
-                  <p className="text-xs opacity-80">
-                    {edu.startDate && new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
-                    {edu.current 
-                      ? ' Present' 
-                      : edu.endDate && ` ${new Date(edu.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
-                  </p>
-                </div>
-              ))}
-            </div>
+          {resumeData.personalInfo.phone && (
+            <p className="text-sm mb-2">{resumeData.personalInfo.phone}</p>
+          )}
+          {resumeData.personalInfo.location && (
+            <p className="text-sm mb-2">{resumeData.personalInfo.location}</p>
+          )}
+          {resumeData.personalInfo.website && (
+            <p className="text-sm mb-2">{resumeData.personalInfo.website}</p>
           )}
         </div>
         
-        <div className="w-2/3 p-8">
-          <div className="mb-8">
-            <h2 className="text-xl font-bold text-resume-amber border-b-2 border-resume-amber-light pb-2 mb-4">
-              About Me
-            </h2>
-            <p>{resumeData.personalInfo.summary}</p>
-          </div>
-
-          {resumeData.experience.length > 0 && (
-            <div>
-              <h2 className="text-xl font-bold text-resume-amber border-b-2 border-resume-amber-light pb-2 mb-4">
-                Work Experience
-              </h2>
-              {resumeData.experience.map((exp) => (
-                <div key={exp.id} className="mb-6">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-bold text-lg">{exp.position}</h3>
-                    <span className="text-sm bg-resume-amber/10 text-resume-amber px-2 py-0.5 rounded">
-                      {exp.startDate && new Date(exp.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
-                      {exp.current 
-                        ? ' Present' 
-                        : exp.endDate && ` ${new Date(exp.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
-                    </span>
-                  </div>
-                  <p className="font-medium text-resume-amber mb-2">{exp.company}</p>
-                  <p className="text-sm">{exp.description}</p>
+        {resumeData.skills.length > 0 && (
+          <div className="mb-6">
+            <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Skills</h2>
+            <div className="space-y-3">
+              {resumeData.skills.map((skill) => (
+                <div key={skill.id}>
+                  <p className="text-sm mb-1">{skill.name}</p>
+                  {skill.level !== undefined && (
+                    <div className="h-1.5 bg-white/20 rounded-full">
+                      <div 
+                        className="h-1.5 bg-white rounded-full" 
+                        style={{ width: `${skill.level}%` }}
+                      ></div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
-          )}
+          </div>
+        )}
+        
+        {resumeData.education.length > 0 && (
+          <div className="mb-6">
+            <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Education</h2>
+            {resumeData.education.map((edu) => (
+              <div key={edu.id} className="mb-4">
+                <p className="font-semibold text-sm">{edu.degree} in {edu.field}</p>
+                <p className="text-sm mb-1">{edu.institution}</p>
+                <p className="text-xs opacity-80">
+                  {edu.startDate && new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                  {edu.current 
+                    ? ' Present' 
+                    : edu.endDate && ` ${new Date(edu.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      
+      <div className="w-2/3 p-8">
+        <div className="mb-8">
+          <h2 className="text-xl font-bold text-resume-amber border-b-2 border-resume-amber-light pb-2 mb-4">
+            About Me
+          </h2>
+          <p>{resumeData.personalInfo.summary}</p>
         </div>
+
+        {resumeData.experience.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-resume-amber border-b-2 border-resume-amber-light pb-2 mb-4">
+              Work Experience
+            </h2>
+            {resumeData.experience.map((exp) => (
+              <div key={exp.id} className="mb-6">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-bold text-lg">{exp.position}</h3>
+                  <span className="text-sm bg-resume-amber/10 text-resume-amber px-2 py-0.5 rounded">
+                    {exp.startDate && new Date(exp.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                    {exp.current 
+                      ? ' Present' 
+                      : exp.endDate && ` ${new Date(exp.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
+                  </span>
+                </div>
+                <p className="font-medium text-resume-amber mb-2">{exp.company}</p>
+                <p className="text-sm">{exp.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
