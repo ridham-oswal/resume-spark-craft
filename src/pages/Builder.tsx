@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { Download, ArrowLeft, FileImage, FileText, Printer, ZoomIn, ZoomOut } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Download, ArrowLeft, FileImage, FileText, Printer } from "lucide-react";
 import { initialResumeData, ResumeData, TemplateType } from "@/lib/resumeData";
 import ResumeTemplates from "@/components/ResumeTemplates";
 import ResumeForm from "@/components/ResumeForm";
@@ -26,136 +27,17 @@ const Builder = () => {
   const [activeTab, setActiveTab] = useState<string>("content");
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>("classic");
   const [previewScale, setPreviewScale] = useState<number>(0.7);
-  const [isExporting, setIsExporting] = useState<boolean>(false);
 
   const handleUpdateResumeData = (data: ResumeData) => {
     setResumeData(data);
   };
 
   const handleDownloadPDF = () => {
-    if (isExporting) return;
-    
-    setIsExporting(true);
-    toast({
-      title: "Processing",
-      description: "Preparing your PDF. This may take a moment...",
-    });
-    
-    // Ensure the preview is at full size before exporting
-    const previewContainer = document.getElementById('preview-container');
-    const previewElement = document.getElementById('resume-preview');
-    
-    if (previewElement && previewContainer) {
-      // Save the original styles to restore later
-      const originalTransform = previewElement.style.transform;
-      const originalWidth = previewElement.style.width;
-      const originalContainerWidth = previewContainer.style.width;
-      const originalContainerOverflow = previewContainer.style.overflow;
-      
-      // Set to full size for export
-      previewElement.style.transform = 'none';
-      previewElement.style.width = '210mm';
-      previewContainer.style.width = '210mm';
-      previewContainer.style.overflow = 'visible';
-      
-      // Wait for styles to apply
-      setTimeout(() => {
-        try {
-          exportToPDF(resumeData, selectedTemplate);
-        } catch (error) {
-          console.error('Error in PDF export:', error);
-          toast({
-            title: "Error",
-            description: "Failed to export as PDF. Please try again.",
-            variant: "destructive",
-          });
-        }
-        
-        // Restore original styles
-        setTimeout(() => {
-          previewElement.style.transform = originalTransform;
-          previewElement.style.width = originalWidth;
-          previewContainer.style.width = originalContainerWidth;
-          previewContainer.style.overflow = originalContainerOverflow;
-          setIsExporting(false);
-        }, 1500);
-      }, 500);
-    } else {
-      try {
-        exportToPDF(resumeData, selectedTemplate);
-      } catch (error) {
-        console.error('Error in PDF export:', error);
-        toast({
-          title: "Error",
-          description: "Failed to export as PDF. Please try again.",
-          variant: "destructive",
-        });
-      }
-      setIsExporting(false);
-    }
+    exportToPDF(resumeData, selectedTemplate);
   };
   
   const handleDownloadJPEG = () => {
-    if (isExporting) return;
-    
-    setIsExporting(true);
-    toast({
-      title: "Processing",
-      description: "Preparing your JPEG. This may take a moment...",
-    });
-    
-    // Ensure the preview is at full size before exporting
-    const previewContainer = document.getElementById('preview-container');
-    const previewElement = document.getElementById('resume-preview');
-    
-    if (previewElement && previewContainer) {
-      // Save the original styles to restore later
-      const originalTransform = previewElement.style.transform;
-      const originalWidth = previewElement.style.width;
-      const originalContainerWidth = previewContainer.style.width;
-      const originalContainerOverflow = previewContainer.style.overflow;
-      
-      // Set to full size for export
-      previewElement.style.transform = 'none';
-      previewElement.style.width = '210mm';
-      previewContainer.style.width = '210mm';
-      previewContainer.style.overflow = 'visible';
-      
-      // Wait for styles to apply
-      setTimeout(() => {
-        try {
-          exportToJPEG(resumeData);
-        } catch (error) {
-          console.error('Error in JPEG export:', error);
-          toast({
-            title: "Error",
-            description: "Failed to export as JPEG. Please try again.",
-            variant: "destructive",
-          });
-        }
-        
-        // Restore original styles
-        setTimeout(() => {
-          previewElement.style.transform = originalTransform;
-          previewElement.style.width = originalWidth;
-          previewContainer.style.width = originalContainerWidth;
-          previewContainer.style.overflow = originalContainerOverflow;
-          setIsExporting(false);
-        }, 1500);
-      }, 500);
-    } else {
-      try {
-        exportToJPEG(resumeData);
-      } catch (error) {
-        console.error('Error in JPEG export:', error);
-        toast({
-          title: "Error",
-          description: "Failed to export as JPEG. Please try again.",
-          variant: "destructive",
-        });
-      }
-      setIsExporting(false);
-    }
+    exportToJPEG(resumeData);
   };
   
   const handlePrint = () => {
@@ -183,20 +65,17 @@ const Builder = () => {
           <div className="flex gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button 
-                  className="gap-2" 
-                  disabled={isExporting}
-                >
+                <Button className="gap-2">
                   <Download className="h-4 w-4" />
-                  {isExporting ? "Processing..." : "Download"}
+                  Download
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleDownloadPDF} className="gap-2" disabled={isExporting}>
+                <DropdownMenuItem onClick={handleDownloadPDF} className="gap-2">
                   <FileText className="h-4 w-4" />
                   <span>PDF Format</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDownloadJPEG} className="gap-2" disabled={isExporting}>
+                <DropdownMenuItem onClick={handleDownloadJPEG} className="gap-2">
                   <FileImage className="h-4 w-4" />
                   <span>JPEG Format</span>
                 </DropdownMenuItem>
@@ -246,36 +125,23 @@ const Builder = () => {
           <div className="lg:sticky lg:top-20 self-start">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Preview</h2>
-              <div className="flex items-center gap-2 no-print">
+              <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500">Zoom:</span>
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => setPreviewScale(prev => Math.max(0.4, prev - 0.1))}
-                  className="gap-1"
-                >
-                  <ZoomOut className="h-3.5 w-3.5" />
-                </Button>
-                <span className="text-sm w-12 text-center">{Math.round(previewScale * 100)}%</span>
+                >-</Button>
+                <span className="text-sm">{Math.round(previewScale * 100)}%</span>
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => setPreviewScale(prev => Math.min(1, prev + 0.1))}
-                  className="gap-1"
-                >
-                  <ZoomIn className="h-3.5 w-3.5" />
-                </Button>
+                >+</Button>
               </div>
             </div>
-            <div className="border rounded-lg overflow-auto shadow-lg max-h-[calc(100vh-250px)] preview-container">
-              <div 
-                id="preview-container"
-                style={{ 
-                  transform: `scale(${previewScale})`, 
-                  transformOrigin: 'top left', 
-                  width: `${100 / previewScale}%` 
-                }}
-              >
+            <div className="border rounded-lg overflow-auto shadow-lg max-h-[calc(100vh-250px)]">
+              <div style={{ transform: `scale(${previewScale})`, transformOrigin: 'top left', width: `${100 / previewScale}%` }}>
                 <ResumePreview resumeData={resumeData} template={selectedTemplate} />
               </div>
             </div>
@@ -283,7 +149,7 @@ const Builder = () => {
         </div>
       </div>
       
-      <footer className="bg-white border-t py-8 no-print">
+      <footer className="bg-white border-t py-8">
         <div className="container">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">

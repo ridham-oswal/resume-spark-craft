@@ -8,18 +8,9 @@ interface ResumePreviewProps {
 }
 
 const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
-  // Date formatting helper function
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short' 
-    });
-  };
-
   // Classic Template
   const ClassicTemplate = () => (
-    <div className="bg-white p-8 shadow-lg print:shadow-none">
+    <div className="bg-white p-8 shadow-lg">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-resume-blue">{resumeData.personalInfo.name}</h1>
         <p className="text-xl text-resume-gray">{resumeData.personalInfo.title}</p>
@@ -44,8 +35,10 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
               <div className="flex justify-between items-baseline">
                 <h3 className="font-bold">{exp.position}</h3>
                 <span className="text-sm text-resume-gray">
-                  {formatDate(exp.startDate)} - 
-                  {exp.current ? ' Present' : formatDate(exp.endDate)}
+                  {exp.startDate && new Date(exp.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                  {exp.current 
+                    ? ' Present' 
+                    : exp.endDate && ` ${new Date(exp.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
                 </span>
               </div>
               <p className="text-resume-blue italic">{exp.company}</p>
@@ -63,8 +56,10 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
               <div className="flex justify-between items-baseline">
                 <h3 className="font-bold">{edu.institution}</h3>
                 <span className="text-sm text-resume-gray">
-                  {formatDate(edu.startDate)} - 
-                  {edu.current ? ' Present' : formatDate(edu.endDate)}
+                  {edu.startDate && new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                  {edu.current 
+                    ? ' Present' 
+                    : edu.endDate && ` ${new Date(edu.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
                 </span>
               </div>
               <p className="text-resume-blue italic">{edu.degree} in {edu.field}</p>
@@ -145,8 +140,10 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
                     <h3 className="font-bold text-resume-blue">{exp.position}</h3>
                     <p className="text-resume-gray italic mb-1">{exp.company}</p>
                     <p className="text-sm text-resume-gray mb-2">
-                      {formatDate(exp.startDate)} - 
-                      {exp.current ? ' Present' : formatDate(exp.endDate)}
+                      {exp.startDate && new Date(exp.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                      {exp.current 
+                        ? ' Present' 
+                        : exp.endDate && ` ${new Date(exp.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
                     </p>
                     <p className="text-sm">{exp.description}</p>
                   </div>
@@ -163,8 +160,10 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
                     <h3 className="font-bold text-resume-blue">{edu.degree} in {edu.field}</h3>
                     <p className="text-resume-gray italic mb-1">{edu.institution}</p>
                     <p className="text-sm text-resume-gray mb-2">
-                      {formatDate(edu.startDate)} - 
-                      {edu.current ? ' Present' : formatDate(edu.endDate)}
+                      {edu.startDate && new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                      {edu.current 
+                        ? ' Present' 
+                        : edu.endDate && ` ${new Date(edu.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
                     </p>
                     {edu.description && <p className="text-sm">{edu.description}</p>}
                   </div>
@@ -229,8 +228,10 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
               <div className="flex justify-between items-baseline mb-1">
                 <h3 className="font-medium">{exp.position}</h3>
                 <span className="text-sm text-resume-gray">
-                  {formatDate(exp.startDate)} - 
-                  {exp.current ? ' Present' : formatDate(exp.endDate)}
+                  {exp.startDate && new Date(exp.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                  {exp.current 
+                    ? ' Present' 
+                    : exp.endDate && ` ${new Date(exp.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
                 </span>
               </div>
               <p className="text-resume-gray italic mb-2">{exp.company}</p>
@@ -248,8 +249,10 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
               <div className="flex justify-between items-baseline mb-1">
                 <h3 className="font-medium">{edu.institution}</h3>
                 <span className="text-sm text-resume-gray">
-                  {formatDate(edu.startDate)} - 
-                  {edu.current ? ' Present' : formatDate(edu.endDate)}
+                  {edu.startDate && new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                  {edu.current 
+                    ? ' Present' 
+                    : edu.endDate && ` ${new Date(edu.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
                 </span>
               </div>
               <p className="text-resume-gray italic mb-2">{edu.degree} in {edu.field}</p>
@@ -274,7 +277,7 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
     </div>
   );
 
-  // Executive Template
+  // Executive Template (added)
   const ExecutiveTemplate = () => (
     <div className="bg-white">
       <div className="bg-slate-900 text-white p-8">
@@ -333,8 +336,10 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
                   <div className="flex justify-between items-center mb-2">
                     <p className="text-resume-slate font-medium">{exp.company}</p>
                     <p className="text-sm text-resume-gray">
-                      {formatDate(exp.startDate)} - 
-                      {exp.current ? ' Present' : formatDate(exp.endDate)}
+                      {exp.startDate && new Date(exp.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                      {exp.current 
+                        ? ' Present' 
+                        : exp.endDate && ` ${new Date(exp.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
                     </p>
                   </div>
                   <p className="text-sm">{exp.description}</p>
@@ -353,8 +358,10 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
                   <div className="flex justify-between items-center mb-1">
                     <h3 className="font-bold">{edu.degree} in {edu.field}</h3>
                     <p className="text-sm text-resume-gray">
-                      {formatDate(edu.startDate)} - 
-                      {edu.current ? ' Present' : formatDate(edu.endDate)}
+                      {edu.startDate && new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                      {edu.current 
+                        ? ' Present' 
+                        : edu.endDate && ` ${new Date(edu.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
                     </p>
                   </div>
                   <p className="font-medium mb-1">{edu.institution}</p>
@@ -368,7 +375,7 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
     </div>
   );
 
-  // Professional Template
+  // Professional Template (added)
   const ProfessionalTemplate = () => (
     <div className="bg-white">
       <div className="p-8 border-b-4 border-resume-green">
@@ -437,8 +444,10 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
                 <div className="flex justify-between items-baseline mb-1">
                   <h3 className="font-semibold text-resume-gray-dark">{exp.position}</h3>
                   <span className="text-sm font-medium">
-                    {formatDate(exp.startDate)} - 
-                    {exp.current ? ' Present' : formatDate(exp.endDate)}
+                    {exp.startDate && new Date(exp.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                    {exp.current 
+                      ? ' Present' 
+                      : exp.endDate && ` ${new Date(exp.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
                   </span>
                 </div>
                 <p className="text-resume-green font-medium mb-2">{exp.company}</p>
@@ -458,8 +467,10 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
                 <div className="flex justify-between items-baseline">
                   <h3 className="font-semibold text-resume-gray-dark">{edu.degree} in {edu.field}</h3>
                   <span className="text-sm font-medium">
-                    {formatDate(edu.startDate)} - 
-                    {edu.current ? ' Present' : formatDate(edu.endDate)}
+                    {edu.startDate && new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                    {edu.current 
+                      ? ' Present' 
+                      : edu.endDate && ` ${new Date(edu.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
                   </span>
                 </div>
                 <p className="text-resume-green font-medium mb-1">{edu.institution}</p>
@@ -472,284 +483,43 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
     </div>
   );
 
-  // Creative Template
+  // Creative Template (added)
   const CreativeTemplate = () => (
-    <div className="bg-white flex flex-col md:flex-row">
-      <div className="md:w-1/3 bg-resume-amber p-6 text-white">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold mb-1">{resumeData.personalInfo.name}</h1>
-          <p className="text-lg">{resumeData.personalInfo.title}</p>
-        </div>
-        
-        <div className="mb-6">
-          <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Contact</h2>
-          {resumeData.personalInfo.email && (
-            <p className="text-sm mb-2">{resumeData.personalInfo.email}</p>
-          )}
-          {resumeData.personalInfo.phone && (
-            <p className="text-sm mb-2">{resumeData.personalInfo.phone}</p>
-          )}
-          {resumeData.personalInfo.location && (
-            <p className="text-sm mb-2">{resumeData.personalInfo.location}</p>
-          )}
-          {resumeData.personalInfo.website && (
-            <p className="text-sm mb-2">{resumeData.personalInfo.website}</p>
-          )}
-        </div>
-        
-        {resumeData.skills.length > 0 && (
-          <div className="mb-6">
-            <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Skills</h2>
-            <div className="space-y-3">
-              {resumeData.skills.map((skill) => (
-                <div key={skill.id}>
-                  <p className="text-sm mb-1">{skill.name}</p>
-                  {skill.level !== undefined && (
-                    <div className="h-1.5 bg-white/20 rounded-full">
-                      <div 
-                        className="h-1.5 bg-white rounded-full" 
-                        style={{ width: `${skill.level}%` }}
-                      ></div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        
-        {resumeData.education.length > 0 && (
-          <div className="mb-6">
-            <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Education</h2>
-            {resumeData.education.map((edu) => (
-              <div key={edu.id} className="mb-4">
-                <p className="font-semibold text-sm">{edu.degree} in {edu.field}</p>
-                <p className="text-sm mb-1">{edu.institution}</p>
-                <p className="text-xs opacity-80">
-                  {formatDate(edu.startDate)} - 
-                  {edu.current ? ' Present' : formatDate(edu.endDate)}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      
-      <div className="md:w-2/3 p-8">
-        <div className="mb-8">
-          <h2 className="text-xl font-bold text-resume-amber border-b-2 border-resume-amber-light pb-2 mb-4">
-            About Me
-          </h2>
-          <p>{resumeData.personalInfo.summary}</p>
-        </div>
-
-        {resumeData.experience.length > 0 && (
-          <div>
-            <h2 className="text-xl font-bold text-resume-amber border-b-2 border-resume-amber-light pb-2 mb-4">
-              Work Experience
-            </h2>
-            {resumeData.experience.map((exp) => (
-              <div key={exp.id} className="mb-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-bold text-lg">{exp.position}</h3>
-                  <span className="text-sm bg-resume-amber/10 text-resume-amber px-2 py-0.5 rounded">
-                    {formatDate(exp.startDate)} - 
-                    {exp.current ? ' Present' : formatDate(exp.endDate)}
-                  </span>
-                </div>
-                <p className="font-medium text-resume-amber mb-2">{exp.company}</p>
-                <p className="text-sm">{exp.description}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  // Add a new "Corporate" template
-  const CorporateTemplate = () => (
     <div className="bg-white">
-      <div className="bg-slate-800 text-white p-8 flex justify-between items-end">
-        <div>
-          <h1 className="text-3xl font-bold">{resumeData.personalInfo.name}</h1>
-          <p className="text-lg mt-2">{resumeData.personalInfo.title}</p>
-        </div>
-        <div className="text-right text-sm">
-          {resumeData.personalInfo.email && <p className="mb-1">{resumeData.personalInfo.email}</p>}
-          {resumeData.personalInfo.phone && <p className="mb-1">{resumeData.personalInfo.phone}</p>}
-          {resumeData.personalInfo.location && <p className="mb-1">{resumeData.personalInfo.location}</p>}
-          {resumeData.personalInfo.website && <p>{resumeData.personalInfo.website}</p>}
-        </div>
-      </div>
-      
-      <div className="p-8">
-        <div className="mb-8">
-          <h2 className="text-xl font-bold text-slate-800 mb-3">Summary</h2>
-          <div className="pl-4 border-l-4 border-slate-800">
-            <p className="text-slate-600">{resumeData.personalInfo.summary}</p>
-          </div>
-        </div>
-        
-        {resumeData.experience.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-xl font-bold text-slate-800 mb-6">Professional Experience</h2>
-            {resumeData.experience.map((exp) => (
-              <div key={exp.id} className="mb-6">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-700">{exp.position}</h3>
-                    <p className="text-slate-600">{exp.company}</p>
-                  </div>
-                  <div className="bg-slate-100 px-3 py-1 rounded-md text-sm text-slate-600">
-                    {formatDate(exp.startDate)} - {exp.current ? 'Present' : formatDate(exp.endDate)}
-                  </div>
-                </div>
-                <p className="text-slate-600">{exp.description}</p>
-              </div>
-            ))}
-          </div>
-        )}
-        
-        {resumeData.education.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-xl font-bold text-slate-800 mb-6">Education</h2>
-            {resumeData.education.map((edu) => (
-              <div key={edu.id} className="mb-5">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-700">{edu.degree} in {edu.field}</h3>
-                    <p className="text-slate-600">{edu.institution}</p>
-                  </div>
-                  <div className="bg-slate-100 px-3 py-1 rounded-md text-sm text-slate-600">
-                    {formatDate(edu.startDate)} - {edu.current ? 'Present' : formatDate(edu.endDate)}
-                  </div>
-                </div>
-                {edu.description && <p className="text-slate-600">{edu.description}</p>}
-              </div>
-            ))}
-          </div>
-        )}
-        
-        {resumeData.skills.length > 0 && (
-          <div>
-            <h2 className="text-xl font-bold text-slate-800 mb-4">Key Skills</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {resumeData.skills.map((skill) => (
-                <div key={skill.id} className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-slate-800 rounded-full"></div>
-                  <p className="text-slate-600">{skill.name}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  // Tech Template
-  const TechTemplate = () => (
-    <div className="bg-white">
-      <div className="grid grid-cols-12">
-        <div className="col-span-8 p-8">
-          <h1 className="text-3xl font-bold text-indigo-700">{resumeData.personalInfo.name}</h1>
-          <p className="text-xl text-gray-600 mb-6">{resumeData.personalInfo.title}</p>
-          
-          <div className="mb-8">
-            <h2 className="text-lg font-bold text-indigo-700 flex items-center gap-2 mb-3">
-              <span className="w-6 h-1 bg-indigo-700"></span>
-              <span>About Me</span>
-            </h2>
-            <p className="text-gray-700">{resumeData.personalInfo.summary}</p>
+      <div className="flex">
+        <div className="w-1/3 bg-resume-amber p-6 text-white min-h-screen">
+          <div className="mb-8 text-center">
+            <h1 className="text-2xl font-bold mb-1">{resumeData.personalInfo.name}</h1>
+            <p className="text-lg">{resumeData.personalInfo.title}</p>
           </div>
           
-          {resumeData.experience.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-lg font-bold text-indigo-700 flex items-center gap-2 mb-4">
-                <span className="w-6 h-1 bg-indigo-700"></span>
-                <span>Work Experience</span>
-              </h2>
-              {resumeData.experience.map((exp) => (
-                <div key={exp.id} className="mb-6">
-                  <div className="flex justify-between items-baseline mb-2">
-                    <h3 className="font-bold text-gray-800">{exp.position}</h3>
-                    <span className="text-sm text-indigo-600 font-medium">
-                      {formatDate(exp.startDate)} - {exp.current ? 'Present' : formatDate(exp.endDate)}
-                    </span>
-                  </div>
-                  <p className="text-indigo-600 font-medium mb-2">{exp.company}</p>
-                  <p className="text-gray-600 text-sm">{exp.description}</p>
-                </div>
-              ))}
-            </div>
-          )}
-          
-          {resumeData.education.length > 0 && (
-            <div>
-              <h2 className="text-lg font-bold text-indigo-700 flex items-center gap-2 mb-4">
-                <span className="w-6 h-1 bg-indigo-700"></span>
-                <span>Education</span>
-              </h2>
-              {resumeData.education.map((edu) => (
-                <div key={edu.id} className="mb-4">
-                  <div className="flex justify-between items-baseline mb-2">
-                    <h3 className="font-bold text-gray-800">{edu.degree} in {edu.field}</h3>
-                    <span className="text-sm text-indigo-600 font-medium">
-                      {formatDate(edu.startDate)} - {edu.current ? 'Present' : formatDate(edu.endDate)}
-                    </span>
-                  </div>
-                  <p className="text-indigo-600 font-medium mb-1">{edu.institution}</p>
-                  {edu.description && <p className="text-gray-600 text-sm">{edu.description}</p>}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        
-        <div className="col-span-4 bg-indigo-50 p-6">
           <div className="mb-6">
-            <h2 className="text-lg font-bold text-indigo-800 mb-3">Contact</h2>
+            <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Contact</h2>
             {resumeData.personalInfo.email && (
-              <div className="mb-2">
-                <p className="font-medium text-indigo-700">Email</p>
-                <p className="text-sm text-gray-700">{resumeData.personalInfo.email}</p>
-              </div>
+              <p className="text-sm mb-2">{resumeData.personalInfo.email}</p>
             )}
             {resumeData.personalInfo.phone && (
-              <div className="mb-2">
-                <p className="font-medium text-indigo-700">Phone</p>
-                <p className="text-sm text-gray-700">{resumeData.personalInfo.phone}</p>
-              </div>
+              <p className="text-sm mb-2">{resumeData.personalInfo.phone}</p>
             )}
             {resumeData.personalInfo.location && (
-              <div className="mb-2">
-                <p className="font-medium text-indigo-700">Location</p>
-                <p className="text-sm text-gray-700">{resumeData.personalInfo.location}</p>
-              </div>
+              <p className="text-sm mb-2">{resumeData.personalInfo.location}</p>
             )}
             {resumeData.personalInfo.website && (
-              <div className="mb-2">
-                <p className="font-medium text-indigo-700">Website</p>
-                <p className="text-sm text-gray-700">{resumeData.personalInfo.website}</p>
-              </div>
+              <p className="text-sm mb-2">{resumeData.personalInfo.website}</p>
             )}
           </div>
           
           {resumeData.skills.length > 0 && (
-            <div>
-              <h2 className="text-lg font-bold text-indigo-800 mb-4">Skills</h2>
+            <div className="mb-6">
+              <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Skills</h2>
               <div className="space-y-3">
                 {resumeData.skills.map((skill) => (
-                  <div key={skill.id} className="text-sm">
-                    <div className="flex justify-between mb-1">
-                      <span className="text-gray-700">{skill.name}</span>
-                      {skill.level !== undefined && <span className="text-indigo-700">{skill.level}%</span>}
-                    </div>
+                  <div key={skill.id}>
+                    <p className="text-sm mb-1">{skill.name}</p>
                     {skill.level !== undefined && (
-                      <div className="h-1.5 bg-gray-200 rounded-full">
+                      <div className="h-1.5 bg-white/20 rounded-full">
                         <div 
-                          className="h-1.5 bg-indigo-700 rounded-full" 
+                          className="h-1.5 bg-white rounded-full" 
                           style={{ width: `${skill.level}%` }}
                         ></div>
                       </div>
@@ -759,13 +529,63 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
               </div>
             </div>
           )}
+          
+          {resumeData.education.length > 0 && (
+            <div className="mb-6">
+              <h2 className="uppercase text-sm font-bold mb-3 border-b border-white/30 pb-1">Education</h2>
+              {resumeData.education.map((edu) => (
+                <div key={edu.id} className="mb-4">
+                  <p className="font-semibold text-sm">{edu.degree} in {edu.field}</p>
+                  <p className="text-sm mb-1">{edu.institution}</p>
+                  <p className="text-xs opacity-80">
+                    {edu.startDate && new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                    {edu.current 
+                      ? ' Present' 
+                      : edu.endDate && ` ${new Date(edu.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <div className="w-2/3 p-8">
+          <div className="mb-8">
+            <h2 className="text-xl font-bold text-resume-amber border-b-2 border-resume-amber-light pb-2 mb-4">
+              About Me
+            </h2>
+            <p>{resumeData.personalInfo.summary}</p>
+          </div>
+
+          {resumeData.experience.length > 0 && (
+            <div>
+              <h2 className="text-xl font-bold text-resume-amber border-b-2 border-resume-amber-light pb-2 mb-4">
+                Work Experience
+              </h2>
+              {resumeData.experience.map((exp) => (
+                <div key={exp.id} className="mb-6">
+                  <div className="flex justify-between items-center">
+                    <h3 className="font-bold text-lg">{exp.position}</h3>
+                    <span className="text-sm bg-resume-amber/10 text-resume-amber px-2 py-0.5 rounded">
+                      {exp.startDate && new Date(exp.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - 
+                      {exp.current 
+                        ? ' Present' 
+                        : exp.endDate && ` ${new Date(exp.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
+                    </span>
+                  </div>
+                  <p className="font-medium text-resume-amber mb-2">{exp.company}</p>
+                  <p className="text-sm">{exp.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 
   return (
-    <div id="resume-preview" className="resume-page a4-dimensions">
+    <div id="resume-preview" className="resume-page">
       {template === "classic" ? (
         <ClassicTemplate />
       ) : template === "modern" ? (
@@ -778,10 +598,6 @@ const ResumePreview = ({ resumeData, template }: ResumePreviewProps) => {
         <ProfessionalTemplate />
       ) : template === "creative" ? (
         <CreativeTemplate />
-      ) : template === "corporate" ? (
-        <CorporateTemplate />
-      ) : template === "tech" ? (
-        <TechTemplate />
       ) : (
         <ClassicTemplate />
       )}

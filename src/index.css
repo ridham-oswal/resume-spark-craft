@@ -75,7 +75,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
     font-family: 'Inter', sans-serif;
   }
 
@@ -84,27 +84,12 @@
   }
 }
 
-/* A4 Paper dimensions */
 .resume-page {
   width: 210mm;
   min-height: 297mm;
   box-shadow: 0 0 0.5cm rgba(0,0,0,0.1);
   background: white;
   line-height: 1.5;
-  break-inside: avoid;
-  page-break-inside: auto;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-/* A4 dimensions class */
-.a4-dimensions {
-  width: 210mm;
-  padding: 0;
-  margin: 0 auto;
-  background: white;
 }
 
 @page {
@@ -118,30 +103,15 @@
     height: 297mm;
     margin: 0;
     padding: 0;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
   }
-  
   .resume-page {
     margin: 0;
-    border: initial;
-    border-radius: initial;
-    box-shadow: initial;
-    background: initial;
-    page-break-after: always;
+    box-shadow: none;
     width: 100%;
-    height: auto;
-    overflow: hidden;
+    height: 100%;
   }
-  
   .no-print {
     display: none !important;
-  }
-  
-  /* Force background printing */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
   }
 }
 
@@ -174,177 +144,4 @@
   background: white;
   padding: 0.5rem;
   border-bottom: 1px solid #eee;
-}
-
-/* Prevent text overlap in exports */
-.resume-page .flex,
-.resume-page .grid {
-  gap: 0.25rem;
-}
-
-/* Spacing fixes for export */
-.resume-page .grid-cols-1,
-.resume-page .grid-cols-2,
-.resume-page .grid-cols-3 {
-  gap: 0.5rem;
-}
-
-/* Make sure all text is spaced properly */
-.resume-page span, 
-.resume-page p {
-  white-space: normal;
-  word-break: break-word;
-}
-
-/* Better spacing for contact info */
-.resume-page .flex.justify-center.flex-wrap.gap-3 {
-  flex-wrap: wrap;
-  gap: 0.75rem !important;
-}
-
-/* Fix for section headers */
-.resume-page h2.border-b-2 {
-  margin-top: 1rem;
-  padding-bottom: 0.25rem;
-}
-
-/* Better contrast for ATS */
-.resume-page {
-  color: #000;
-}
-
-/* Multi-page handling */
-@media print {
-  .resume-page {
-    page-break-after: always;
-  }
-  
-  /* Allow content to flow to next page */
-  .resume-page > div {
-    page-break-inside: auto;
-  }
-  
-  /* Prevent orphaned headers */
-  h1, h2, h3 {
-    page-break-after: avoid;
-  }
-  
-  /* Keep these elements together */
-  .mb-4, .mb-5, .mb-6 {
-    page-break-inside: avoid;
-  }
-}
-
-/* Animation for content loading and transitions */
-.resume-page > div {
-  animation: fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* For creative template that has a sidebar */
-@media print {
-  .resume-page .flex.flex-col.md\:flex-row {
-    display: flex !important;
-    flex-direction: row !important;
-  }
-  
-  .resume-page .md\:w-1\/3 {
-    width: 33.333333% !important;
-  }
-  
-  .resume-page .md\:w-2\/3 {
-    width: 66.666667% !important;
-  }
-}
-
-/* Ensure skill bars print correctly */
-@media print {
-  .resume-page .bg-resume-blue,
-  .resume-page .bg-resume-green,
-  .resume-page .bg-indigo-700,
-  .resume-page .bg-white {
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-}
-
-/* Fix for export rendering */
-#resume-preview {
-  page-break-inside: avoid;
-  break-inside: avoid;
-  display: block;
-}
-
-#resume-preview * {
-  box-sizing: border-box;
-}
-
-/* Fix for PDF export rendering */
-.html2pdf__container {
-  background-color: white !important;
-}
-
-/* Ensure borders and backgrounds render correctly in exports */
-.resume-page div,
-.resume-page section,
-.resume-page header {
-  box-sizing: border-box;
-  page-break-inside: avoid;
-}
-
-/* Fix for skills bars in exports */
-.resume-page [class*="bg-"] {
-  position: relative; /* Ensure backgrounds render properly */
-}
-
-/* Enhanced export styles */
-#resume-clone, #resume-clone-jpg {
-  background-color: white !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: visible !important;
-  width: 210mm !important;
-}
-
-#resume-clone *, #resume-clone-jpg * {
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-/* Fix for resume templates to ensure they're visible in exports */
-.resume-page > div {
-  display: block !important;
-  width: 100% !important;
-  background-color: white !important;
-  visibility: visible !important;
-}
-
-/* Fix for flex layouts in exports */
-.resume-page .flex {
-  display: flex !important;
-}
-
-.resume-page .grid {
-  display: grid !important;
-}
-
-.resume-page .bg-white,
-.resume-page .bg-slate-900,
-.resume-page .bg-resume-blue,
-.resume-page .bg-resume-amber,
-.resume-page .bg-resume-green,
-.resume-page .bg-indigo-50,
-.resume-page .bg-indigo-700,
-.resume-page .bg-slate-800 {
-  background-color: currentColor !important;
-}
-
-/* Ensure images render correctly */
-.resume-page img {
-  max-width: 100% !important;
-  object-fit: contain !important;
 }
